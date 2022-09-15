@@ -116,8 +116,8 @@ public class Campo {
 			return "x";
 		}else if(aberto && minado) {
 			return "*";
-		}else if(aberto && minasVizinha() > 0) {
-			return Long.toString(minasVizinha());
+		}else if(aberto && minasVizinhaca() > 0) {
+			return Long.toString(minasVizinhaca());
 		} else if(aberto) {
 			return " ";
 		}else {
