@@ -2,10 +2,12 @@ package br.com.msf.model;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import br.com.mfs.exececao.ExplosaoException;
 import br.com.mfs.model.Campo;
 
 class CampoTest {
@@ -78,5 +80,79 @@ class CampoTest {
 	  Campo vizinho = new Campo(1, 1);
 	  boolean result = campo.adicionarVizinho(vizinho);
 	  assertFalse(result);
+	}
+	
+	
+	@Test
+	void testeValorPadraoAtributoMarcado() {
+		assertFalse(campo.isMarcado());
+	}
+	
+	@Test
+	void testeAlternarMarcacao() {
+		campo.alternarMarcao();
+		assertTrue(campo.isMarcado());
+	}
+	
+	@Test
+	void testeAlternarDuasMarcacao() {
+		campo.alternarMarcao();
+		campo.alternarMarcao();
+		assertFalse(campo.isMarcado());
+	}
+	
+	@Test
+	void testeAbrirNaoMinadoNaoMarcado() {
+		assertTrue(campo.abrir());
+	}
+	
+	@Test
+	void testeAbrirNaoMinadoMarcado() {
+		campo.alternarMarcao();
+		assertFalse(campo.abrir());
+	}
+	
+	@Test
+	void testeAbrirMinadoMarcado() {
+		campo.alternarMarcao();
+		campo.minar();
+		assertFalse(campo.abrir());
+	}
+	
+	@Test
+	void testeAbrirMinadoNaoMarcado() {
+		campo.minar();
+		assertThrows(ExplosaoException.class, () -> {
+			campo.abrir();
+		});
+	}
+	
+	@Test
+	void testeAbrirComVizinhos() {
+		Campo campo11 = new Campo(1, 1);
+		Campo campo22 = new Campo(2, 2);
+      
+        campo22.adicionarVizinho(campo11);
+        campo.adicionarVizinho(campo22);
+        
+		campo.abrir();
+		assertTrue(campo22.isAberto() && campo11.isAberto());
+	}
+	
+	@Test
+	void testeAbrirComVizinhos2() {
+
+		Campo campo12 = new Campo(1, 2);
+		Campo campo11 = new Campo(1, 1);
+		Campo campo22 = new Campo(2, 2);
+		
+		campo12.minar();
+        
+		campo22.adicionarVizinho(campo12);
+        campo22.adicionarVizinho(campo11);
+        campo.adicionarVizinho(campo22);
+        
+		campo.abrir();
+		assertTrue(campo22.isAberto() && !campo11.isAberto() && !campo12.isAberto());
 	}
 }

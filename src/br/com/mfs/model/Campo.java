@@ -3,6 +3,8 @@ package br.com.mfs.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.mfs.exececao.ExplosaoException;
+
 public class Campo {
 
 	private final int linha;
@@ -40,7 +42,50 @@ public class Campo {
 		}
 
 	}
-
+    public void alternarMarcao() {
+    	if(!aberto) {
+    		marcado = !marcado;
+    	}
+    }
+	public boolean abrir() {
+		
+		if(!aberto && !marcado) {
+			aberto = true;
+			
+			if(minado) {
+				throw new ExplosaoException("CAMPO MINADO");
+			}
+			
+			if(vizinhacaSegura()) {
+				vizinhos.forEach(v -> v.abrir());
+			}
+			return true;
+		}else {
+			return false;			
+		}
+		
+	}
+    
+    public boolean vizinhacaSegura() {
+    	return vizinhos.stream().noneMatch(v -> v.minado);
+    }
+    
+    public boolean objetivoAlcancado() {
+    	boolean desvendado = !minado && aberto;
+    	boolean protegido = minado && marcado;
+    	return desvendado || protegido;
+    }
+    
+    public long minasVizinhaca() {
+    	return vizinhos.stream().filter(v -> v.minado).count();
+    }
+    
+    public void reiniciar() {
+    	aberto = false;
+    	minado = false;
+    	marcado = false;
+    	
+    }
 	public int getLinha() {
 		return linha;
 	}
@@ -49,4 +94,37 @@ public class Campo {
 		return coluna;
 	}
 
+	public boolean isMarcado() {
+		return marcado;
+	}
+	
+	public boolean isAberto() {
+		return aberto;
+	}
+	
+	public boolean isMinado() {
+		return minado;
+	}
+
+	public void minar() {
+		minado = true;
+	}
+
+	@Override
+	public String toString() {
+		if(marcado) {
+			return "x";
+		}else if(aberto && minado) {
+			return "*";
+		}else if(aberto && minasVizinha() > 0) {
+			return Long.toString(minasVizinha());
+		} else if(aberto) {
+			return " ";
+		}else {
+			return "?";
+		}
+	}
+
+	
+	
 }
