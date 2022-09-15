@@ -101,7 +101,9 @@ public class Campo {
 	public boolean isAberto() {
 		return aberto;
 	}
-	
+	protected void setAberto(boolean aberto) {
+		this.aberto = aberto;
+	}
 	public boolean isMinado() {
 		return minado;
 	}
@@ -109,7 +111,7 @@ public class Campo {
 	public void minar() {
 		minado = true;
 	}
-
+    
 	@Override
 	public String toString() {
 		if(marcado) {

@@ -3,6 +3,8 @@ package br.com.mfs.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.mfs.exececao.ExplosaoException;
+
 public class Tabuleiro {
 
 	private Integer linhas;
@@ -22,10 +24,17 @@ public class Tabuleiro {
 	}
 
 	public void abrir(int linha, int coluna) {
-		campos.parallelStream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna).findFirst()
-				.ifPresent(c -> c.abrir());
+		try {
+
+			campos.parallelStream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna).findFirst()
+					.ifPresent(c -> c.abrir());
+
+		} catch (ExplosaoException explosao) {
+            campos.forEach(c -> c.setAberto(true));
+			throw explosao;
+		}
 	}
-	
+
 	public void marcar(int linha, int coluna) {
 		campos.parallelStream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna).findFirst()
 				.ifPresent(c -> c.alternarMarcao());
@@ -50,7 +59,7 @@ public class Tabuleiro {
 	}
 
 	private void sortearMinas() {
-		Long minasArmadas = 0L;
+		Long minasArmadas = 1L;
 		do {
 			minasArmadas = campos.stream().filter(x -> x.isMinado()).count();
 			int aleatorio = (int) (Math.random() * campos.size());

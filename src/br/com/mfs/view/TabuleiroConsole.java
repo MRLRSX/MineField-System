@@ -48,7 +48,7 @@ public class TabuleiroConsole {
 			   String digitado = capturarValorDigitado("Digite (x, y): ");
 			
 			   Iterator<Integer> xy = Arrays.stream(digitado.split(",")).map(e -> Integer.parseInt(e.trim())).iterator();
-			   digitado = capturarValorDigitado(" 1 - Abrir ou 2 - (Des)Marcar");
+			   digitado = capturarValorDigitado(" 1 - Abrir ou 2 - (Des)Marcar: ");
 			   
 			   if(digitado.equalsIgnoreCase("1")) {
 				   tabuleiro.abrir(xy.next(), xy.next());				   
@@ -58,12 +58,13 @@ public class TabuleiroConsole {
 		   }
 		   System.out.println("VOCÊ GANHOU !!!");
 	   }catch(ExplosaoException explosao){
+		   System.out.println(tabuleiro);
 		   System.out.println("VOCÊ PERDEU !!!");
 	   }
 	}
     
 	public String capturarValorDigitado(String texto) {
-		System.out.print(texto);
+		System.out.printf(texto);
 		String digitado = entrada.nextLine();
 		if(digitado.equalsIgnoreCase("sair")) {
 			throw new SairException("SAIR");
