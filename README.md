@@ -1,4 +1,4 @@
-# :chess_pawn: MineField Swing System in Java :computer: :coffee:
+# :chess_pawn: MineField System in Java :computer: :coffee:
 <br><br>
 - Projeto MineField System 
  - Padrão Observer
