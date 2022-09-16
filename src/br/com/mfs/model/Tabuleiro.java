@@ -59,11 +59,11 @@ public class Tabuleiro {
 	}
 
 	private void sortearMinas() {
-		Long minasArmadas = 1L;
+		Long minasArmadas = 0L;
 		do {
-			minasArmadas = campos.stream().filter(x -> x.isMinado()).count();
 			int aleatorio = (int) (Math.random() * campos.size());
 			campos.get(aleatorio).minar();
+			minasArmadas = campos.stream().filter(x -> x.isMinado()).count();
 		} while (minasArmadas < minas);
 	}
 

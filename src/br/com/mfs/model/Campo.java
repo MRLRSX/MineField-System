@@ -115,7 +115,7 @@ public class Campo {
 	@Override
 	public String toString() {
 		if(marcado) {
-			return "x";
+			return "M";
 		}else if(aberto && minado) {
 			return "*";
 		}else if(aberto && minasVizinhaca() > 0) {
